@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
 from orchestrator import services
+from django.views.decorators.csrf import csrf_exempt
+
 
 @services.custom_login_required
 def dashboard_view(request):
@@ -14,6 +16,39 @@ def homepage(request):
     if 'id' in request.session:
         return redirect('dashboard')
     return render(request, 'homepage.html')
+
+
+def _authenticate_agent(request):
+    token = request.headers.get('X-Agent-Token')
+    if not token:
+        return None
+    return db_helper.get_user_by_agent_token(token)
+
+@csrf_exempt
+def agent_poll_jobs(request):
+    user = _authenticate_agent(request)
+    if not user:
+        return JsonResponse({'error': 'Invalid or missing agent token'}, status=401)
+
+    jobs = services.execution_service.get_pending_jobs_for_agent(user['id'])
+    return JsonResponse({'jobs': jobs})
+
+@csrf_exempt
+def agent_report_status(request, job_id):
+    user = _authenticate_agent(request)
+    if not user:
+        return JsonResponse({'error': 'Invalid or missing agent token'}, status=401)
+
+    if request.method == 'POST':
+        services.execution_service.report_job_status(
+            job_id=job_id,
+            status=request.POST.get('status'),
+            log_output=request.POST.get('log_output'),
+            error_message=request.POST.get('error_message')
+        )
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'POST required'}, status=405)
+
 
 # ---------------------------- START USER AUTH SERVICE --------------------------- 
 def login_view(request):
@@ -66,11 +101,15 @@ def dashboard(request):
         'active_view': active_view,
     }
 
-    # 3. Query User Management configuration sub-context (Admins Only)
-    if active_view == 'user_management' and is_admin:
+    # 3. Admin user-management context is ALWAYS loaded for admins now,
+    #    since the panel is a JS-toggled tab embedded in dashboard.html
+    #    (not a separate server-rendered route). There is no follow-up
+    #    request when the tab is clicked, so the data must be present
+    #    on initial page load regardless of which tab starts active.
+    if is_admin:
         search_query = request.GET.get('search', '')
         users_list, departments = services.dashboard_service.load_user_management(search_query)
-        
+
         context.update({
             'users_list': users_list,
             'departments': departments,
@@ -109,27 +148,6 @@ def dashboard(request):
 
 
 # ---------------------------- START ADMIN SERVICE --------------------------- 
-@services.custom_login_required
-def admin_user_management(request):
-    # 1. Enforce access security via the service layer
-    if not services.admin_service.check_admin_clearance(request.custom_user):
-        messages.error(request, "Access Denied: Administrative Clearance Required.")
-        return redirect('dashboard')
-
-    # 2. Extract UI state queries
-    search_query = request.GET.get('search', '')
-
-    # 3. Retrieve system records from service package
-    admin_data = services.admin_service.get_user_management_context(search_query)
-
-    # 4. Synthesize final display context
-    context = {
-        'search_query': search_query,
-        'is_admin': True,
-        **admin_data  # Unpacks users_list, departments, folders, and all_system_folders safely
-    }
-    
-    return render(request, 'adminpage/admin_user_management.html', context)
 
 @services.custom_login_required
 def admin_save_user(request, user_id=None):
@@ -149,7 +167,9 @@ def admin_save_user(request, user_id=None):
         except Exception as e:
             messages.error(request, f"Database operational failure: {str(e)}")
 
-    return redirect('admin_user_management')
+    # Redirect back into the dashboard with the user-management tab
+    # selected, instead of the old standalone admin page route.
+    return redirect(f"{reverse('dashboard')}?view=user_management")
 
 # ---------------------------- END ADMIN SERVICE --------------------------- 
 
@@ -227,4 +247,4 @@ def select_version(request):
         return redirect('dashboard')
     
 
-# ---------------------------- END FOLDER SERVICE --------------------------- 
+# ---------------------------- END FOLDER SERVICE ---------------------------

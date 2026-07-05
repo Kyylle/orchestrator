@@ -1,6 +1,3 @@
-/* ==========================================================================
-   Global CSS Design variables
-   ========================================================================== */
 :root {
     --uipath-blue: #1b75ff;
     --uipath-blue-hover: #125cd4;
@@ -8,85 +5,122 @@
     --uipath-border: #e2e8f0;
     --uipath-text-main: #1e293b;
     --uipath-text-secondary: #64748b;
-    
-    /* Layout Constants */
     --sidebar-width: 260px;
     --sidebar-collapsed-width: 72px;
     --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================================
-   Base Typography & Page Resets
-   ========================================================================== */
-@font-face {
-    font-family: 'Poppins';
-    src: url('../fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
+/* =========================================================
+   GLOBAL RESET (IMPORTANT FOR FLEX HEIGHT SYSTEM)
+   ========================================================= */
+
+html, body {
+    height: 100%;
 }
 
 body {
+    margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: var(--uipath-bg);
     color: var(--uipath-text-main);
-    overflow: hidden;
+    overflow: hidden; /* prevents body scroll, dashboard controls scroll */
 }
 
-/* ==========================================================================
-   Structural Flexbox Viewport System
-   ========================================================================== */
+/* =========================================================
+   MAIN APP LAYOUT (HEADER + BODY SPLIT)
+   ========================================================= */
+
 .app-viewport {
     height: 100vh;
-    width: 100vw;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
+
+/* =========================================================
+   MAIN WORKSPACE ROW (SIDEBAR + CONTENT)
+   ========================================================= */
 
 .dashboard-viewport-row {
-    display: flex !important;
-    flex-direction: row !important;
-    width: 100vw;
-    height: calc(100vh - 56px); /* Viewport height minus header height */
+    height: 100vh;
+    overflow: hidden; /* stops full-page scroll */
+}
+
+/* =========================================================
+   SIDEBAR (FULL HEIGHT FIX)
+   ========================================================= */
+
+/* .orchestrator-sidebar,
+.sidebar-wrapper {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--uipath-border);
+    background: #fff;
+} */
+
+/* =========================================================
+   MAIN CONTENT AREA
+   ========================================================= */
+
+.main-content-panel {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;   /* IMPORTANT for scroll */
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
-/* Explicit layout assignment for the sidebar wrapper */
-.orchestrator-sidebar {
-    width: 260px; /* Or your preferred static width */
-    min-width: 260px;
-    flex-shrink: 0;
-}
-
-/* The right side container must claim the remaining space */
-.main-content-panel {
-    flex-grow: 1 !important; /* Forces container to absorb all right-side space */
-    width: 100% !important;   /* Expands view to viewport boundaries */
-    min-width: 0;             /* Prevents layout tables from breaking screen walls */
-    height: 100%;             /* Ensures vertical filling match */
-    overflow-y: auto;         /* Restricts page scrolling to data panel only */
-}
+/* =========================================================
+   SCROLL AREA (ONLY HERE SCROLL IS ALLOWED)
+   ========================================================= */
 
 .dynamic-scroll-container {
-    width: 100% !important;   /* Stretches sub-modules uniformly across screen */
-    display: block;
+    height: 100%;
+    overflow-y: auto;
 }
+
+/* =========================================================
+   TAB CONTENT
+   ========================================================= */
 
 .tab-pane-content {
     width: 100%;
 }
 
-/* Modal Content Base styles */
+/* =========================================================
+   MODAL FIXES
+   ========================================================= */
+
 .modal-content {
     background-color: #ffffff;
     border: 1px solid var(--uipath-border);
     border-radius: 8px;
 }
 
-.modal-header, .modal-footer {
+.modal-header,
+.modal-footer {
     background-color: #f8fafc;
     border-color: var(--uipath-border);
 }
 
-/* Typography Helpers */
+/* =========================================================
+   TYPOGRAPHY HELPERS
+   ========================================================= */
+
 .fs-7 { font-size: 0.8rem !important; }
 .fs-8 { font-size: 0.7rem !important; }
+
+
+.tab-pane-content {
+    animation: fadeIn 0.15s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

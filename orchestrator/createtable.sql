@@ -67,6 +67,12 @@ CREATE TABLE [dbo].[r_orchestrator_user_permissions] (
     [folder_id] INT NULL -- Kept NULL unless explicitly granted individual cross-department folders
 );
 
+
+ALTER TABLE [dbo].[m_orchestrator_users]
+ADD [uirobot_exe_path] VARCHAR(500) NULL,
+    [agent_api_token] VARCHAR(255) NULL;
+
+
 -- Optimization indexes for dictionary join performance filters inside db_helper
 CREATE NONCLUSTERED INDEX [IX_r_orchestrator_user_permissions_user_id] 
 ON [dbo].[r_orchestrator_user_permissions] ([user_id] ASC);

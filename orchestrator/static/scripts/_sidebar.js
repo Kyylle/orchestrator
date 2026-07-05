@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tabLinks = document.querySelectorAll(".nav-link-tab");
     const tabContents = document.querySelectorAll(".tab-pane-content");
-    const projectsSection = document.getElementById("sidebar-projects-section");
     
     // Target your admin view container wrap matching base.html configuration
     const adminContainer = document.querySelector(".main-content-panel > .dynamic-scroll-container:has(> .admin-user-management)");
@@ -20,23 +19,27 @@ document.addEventListener("DOMContentLoaded", function () {
             const selectedTab = this.getAttribute("data-tab");
 
             if (selectedTab === "user_management") {
-                // Show Admin Panels, hide baseline tabs
+                // Show Admin Panel, hide baseline tabs
                 if (adminContainer) adminContainer.classList.remove("d-none");
-                projectsSection.classList.add("d-none");
             } else {
                 // Return to baseline views layout routing
                 if (adminContainer) adminContainer.classList.add("d-none");
-                
+
                 const targetContent = document.getElementById(`tab-content-${selectedTab}`);
                 if (targetContent) targetContent.classList.remove("d-none");
-
-                // Toggle dynamic secondary folders drawer
-                if (selectedTab === "automation") {
-                    projectsSection.classList.remove("d-none");
-                } else {
-                    projectsSection.classList.add("d-none");
-                }
             }
+
+            const sidebar = document.getElementById("sidebarContainer");
+            const toggleBtn = document.getElementById("sidebarToggle");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+        if (toggleBtn && sidebar) {
+            toggleBtn.addEventListener("click", function () {
+                sidebar.classList.toggle("sidebar-collapsed");
+                const isCollapsed = sidebar.classList.contains("sidebar-collapsed");
+                toggleIcon.style.transform = isCollapsed ? "rotate(180deg)" : "rotate(0deg)";
+            });
+        }
         });
     });
 });

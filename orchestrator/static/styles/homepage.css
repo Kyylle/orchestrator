@@ -35,7 +35,7 @@
         position: relative;
     }
 
-    /* Subtle high-tech background color glow accent */
+    /* Subtle high-tech background color glow accent
     body::before {
         content: "";
         position: absolute;
@@ -46,7 +46,7 @@
         background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(255,255,255,0) 70%);
         z-index: -1;
         pointer-events: none;
-    }
+    } */
 
     /* Modern Text & Branding Elements */
     .brand-title {

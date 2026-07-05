@@ -1,4 +1,313 @@
-{% load static %}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'styles/_homeoverview.css' %}">
-{% endblock %}
+<div class="container-fluid py-4">
+
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="row g-4">
+
+        <!-- ================= LEFT COLUMN ================= -->
+
+        <div class="col-lg-4">
+
+            <!-- Create Folder -->
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-header">
+                    <h5 class="mb-0">Create Folder</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" action="{% url 'create_folder' %}">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Folder Name</label>
+
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Physical Path
+                            </label>
+
+                            <input type="text" name="physical_path" class="form-control"
+                                placeholder="C:\Projects\Automation" required>
+                        </div>
+
+                        <button class="btn btn-primary w-100">
+                            Create Folder
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- Folder List -->
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        My Folders
+                    </h5>
+                </div>
+
+                <div class="list-group list-group-flush">
+
+                    {% for folder in folders %}
+
+                    <a href="?folder_id={{ folder.id }}"
+                        class="list-group-item list-group-item-action {% if selected_folder and folder.id == selected_folder.id %}active{% endif %}">
+
+                        <strong>{{ folder.name }}</strong>
+
+                        <br>
+
+                        <small>
+                            {{ folder.physical_path }}
+                        </small>
+
+                    </a>
+
+                    {% empty %}
+
+                    <div class="list-group-item text-center text-muted">
+
+                        No folders created.
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= RIGHT COLUMN ================= -->
+
+        <div class="col-lg-8">
+
+            {% if selected_folder %}
+
+            <!-- Folder Details -->
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h5 class="mb-0">
+                            {{ selected_folder.name }}
+                        </h5>
+
+                        <small class="text-muted">
+
+                            {{ selected_folder.physical_path }}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" action="{% url 'edit_folder' selected_folder.id %}">
+
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Folder Name
+                                </label>
+
+                                <input class="form-control" name="name" value="{{ selected_folder.name }}" required>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Physical Path
+                                </label>
+
+                                <input class="form-control" name="physical_path"
+                                    value="{{ selected_folder.physical_path }}" required>
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-warning mt-3">
+
+                            Save Changes
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Package Versions -->
+
+            {% if path_error %}
+
+            <div class="alert alert-danger">
+
+                {{ path_error }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+
+                        Automation Packages
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if automations %}
+
+                    {% for package_name, versions in automations.items %}
+
+                    <div class="border rounded p-3 mb-3">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <h6 class="mb-0">
+
+                                {{ package_name }}
+
+                            </h6>
+
+                            <span class="badge bg-secondary">
+
+                                {{ versions|length }} Version{{ versions|length|pluralize }}
+
+                            </span>
+
+                        </div>
+
+                        <form method="POST" action="{% url 'select_version' %}">
+
+                            {% csrf_token %}
+
+                            <input type="hidden" name="folder_id" value="{{ selected_folder.id }}">
+
+                            <input type="hidden" name="package_name" value="{{ package_name }}">
+
+                            <div class="row">
+
+                                <div class="col-md-8">
+
+                                    <select class="form-select" name="version" required>
+
+                                        {% for version in versions %}
+
+                                        <option value="{{ version }}">
+
+                                            {{ version }}
+
+                                        </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <button class="btn btn-success w-100">
+
+                                        Deploy
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    {% endfor %}
+
+                    {% else %}
+
+                    <div class="text-center py-5 text-muted">
+
+                        No automation packages found.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center py-5">
+
+                    <h4>
+
+                        Welcome
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Select a folder from the left panel to view its automation packages.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

@@ -12,7 +12,6 @@ urlpatterns = [
     path('folder/version/select/', views.select_version, name='select_version'),
     
     # --- USER MANAGEMENT URLS ---
-    path('admin/users/', views.admin_user_management, name='admin_user_management'),
     path('admin/save-user/', views.admin_save_user, name='admin_save_user'),
     path('admin/save-user/<int:user_id>/', views.admin_save_user, name='admin_save_user'),
 ]

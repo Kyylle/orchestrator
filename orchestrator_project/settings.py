@@ -51,8 +51,11 @@ WSGI_APPLICATION = 'orchestrator_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'AMD_DB',
-        'HOST': 'ptydevsvr',
+        # 'NAME': 'AMD_DB',
+        # 'HOST': 'ptydevsvr',
+        # 'PORT': '',
+        'NAME': 'dev',
+        'HOST': 'DEVK\SQLEXPRESS',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
