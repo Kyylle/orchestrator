@@ -1,0 +1,78 @@
+/* ==========================================
+   Modern Dashboard Tab Navigation Styles
+   ========================================== */
+
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0; /* Subtle slate border */
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    height: 3.5rem; /* Compact 56px height */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.nav-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.75rem; /* Spacing between navigation items */
+    height: 100%;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    height: 3.5rem;
+    position: relative; /* Essential for aligning the active bottom-border line */
+}
+
+.nav-link-tab {
+    color: #64748b; /* Neutral slate-500 font color */
+    font-size: 0.875rem; /* 14px size for clean readability */
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.25rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+
+/* Hover State */
+.nav-link-tab:hover {
+    color: #0f172a; /* Transitions to deep slate-900 */
+}
+
+/* Active Highlight Properties */
+.nav-link-tab.active {
+    color: #1a73e8; /* Modern blue active text */
+    font-weight: 600;
+}
+
+/* Active Bottom Border Line */
+.nav-link-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px; /* Clean bottom accent line */
+    background-color: transparent;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-link-tab.active::after {
+    background-color: #1a73e8; /* Matches active text color */
+}

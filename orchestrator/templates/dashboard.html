@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Core variables, resets, and viewport engine (Loaded Globally) -->
+<link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="app-viewport d-flex flex-column">
+    <!-- Top-level Navigation Header -->
+    {% include 'reusables/_header.html' %}
+    
+    <!-- Core Flexbox Workspace Grid -->
+    <main class="dashboard-viewport-row d-flex flex-row w-100">
+        
+        <!-- Sidebar Navigation Component -->
+        {% include 'reusables/_sidebar.html' %}
+        
+        <!-- Right-side Actionable Workspace -->
+        <section class="main-content-panel flex-grow-1 w-100 min-w-0">
+            {% if active_view == 'user_management' and is_admin %}
+                <!-- Admin View Containment -->
+                <article class="dynamic-scroll-container p-4">
+                    {% include 'adminpage/admin_user_management.html' %}
+                </article>
+            {% else %}
+                <!-- Tabs routing content container -->
+                <article class="dynamic-scroll-container">
+                    <!-- Home Section (Padded) -->
+                    <div id="tab-content-home" class="tab-pane-content p-4">
+                        {% include 'reusables/_homeoverview.html' %}
+                    </div>
+
+                    <!-- Automation Section (Full-height & Flush layout) -->
+                    <div id="tab-content-automation" class="tab-pane-content h-100 d-none">
+                        {% include 'reusables/_automations_content.html' %}
+                    </div>
+                </article>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<script src="{% static 'scripts/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/_login.css' %}">
+
+{% include 'partials/_toast.html' %}
+
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-minimal">
+        <div class="modal-content border-0 shadow-lg p-3 modal-content-flat">
+
+            <!-- Header Section -->
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex flex-column">
+                    <h4 class="modal-title modal-heading-title m-0" id="loginModalLabel">Authentication</h4>
+                    <span class="modal-heading-sub mt-1">PTY Orchestrator</span>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" data-login-url="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="modal-body py-4">
+                    <div class="mb-4">
+                        <label for="username" class="form-label form-label-minimal">Username</label>
+                        <input type="text" class="form-control input-minimal shadow-none text-dark" id="username"
+                            name="username" placeholder="Username" required autocomplete="off">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label form-label-minimal">Password</label>
+                        <input type="password" class="form-control input-minimal shadow-none text-dark" id="password"
+                            name="password" placeholder="Password" required>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3 ps-1">
+                        <div class="form-check">
+                            <input class="form-check-input shadow-none" type="checkbox" id="rememberMe">
+                            <label class="form-check-label text-muted small" for="rememberMe">Remember session</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 pt-0 d-flex flex-column gap-2 w-100">
+                    <button type="submit" class="btn btn-minimal-submit w-100">Log In</button>
+                    <!-- Cleaned up cancel button: triggers Bootstrap close natively -->
+                    <button type="button"
+                        class="btn btn-link text-decoration-none btn-minimal-cancel small w-100 py-1 text-center"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'scripts/_toast.js' %}"></script>

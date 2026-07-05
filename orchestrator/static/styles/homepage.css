@@ -1,0 +1,133 @@
+:root {
+        --uipath-blue: #1b75ff;
+        --uipath-blue-hover: #125cd4;
+        --uipath-bg: #f5f7fa;
+        --uipath-border: #e2e8f0;
+        --uipath-text-main: #1e293b;
+        --uipath-text-secondary: #64748b;
+    }
+
+    
+  @font-face {
+        font-family: 'Poppins';
+         src: url('../fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+    }
+    body {
+        font-family: 'Poppins';
+        background-color: var(--uipath-bg);
+        color: var(--uipath-text-main);
+    }
+   
+
+ body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #fafbfc;
+        /* Recreating the clean dot grid pattern directly from your reference image */
+        background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+        background-size: 24px 24px;
+        color: #0f172a;
+        letter-spacing: -0.1px;
+        position: relative;
+    }
+
+    /* Subtle high-tech background color glow accent */
+    body::before {
+        content: "";
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        top: 20%;
+        right: 10%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(255,255,255,0) 70%);
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Modern Text & Branding Elements */
+    .brand-title {
+        font-weight: 700 !important;
+        font-size: 1.5rem;
+        color: #0f172a;
+        letter-spacing: -0.5px;
+        text-decoration: none;
+    }
+    .brand-accent {
+        color: #007bff; /* Vibrant Blue matching the top-right button styling */
+    }
+
+    /* Modern Styled Button matching top-right Log-In box layout */
+    .btn-modern-login {
+        background-color: #007bff;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        padding: 10px 24px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        transition: all 0.2s ease;
+    }
+    .btn-modern-login:hover {
+        background-color: #0069d9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Large Modern Hero Typography */
+    .hero-heading {
+        font-size: 4rem;
+        font-weight: 800 !important;
+        line-height: 1.15;
+        letter-spacing: -1.5px;
+        color: #0f172a;
+    }
+    .hero-accent {
+        color: #007bff;
+    }
+
+    .hero-accent-ui{
+       color: #FA4616;
+    }
+    .hero-description {
+        font-size: 1.05rem;
+        font-weight: 400 !important;
+        line-height: 1.7;
+        color: #475569;
+    }
+
+    /* Modern Stats / Metrics Cards Layout */
+    .metric-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-4px);
+        background: #ffffff;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+        border-color: rgba(59, 130, 246, 0.2);
+    }
+    .metric-number {
+        font-size: 2.5rem;
+        font-weight: 700 !important;
+        line-height: 1;
+        letter-spacing: -1px;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+    .metric-label {
+        font-size: 0.85rem;
+        font-weight: 500 !important;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }

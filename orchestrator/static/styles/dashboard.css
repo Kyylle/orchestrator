@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Global CSS Design variables
+   ========================================================================== */
+:root {
+    --uipath-blue: #1b75ff;
+    --uipath-blue-hover: #125cd4;
+    --uipath-bg: #f5f7fa;
+    --uipath-border: #e2e8f0;
+    --uipath-text-main: #1e293b;
+    --uipath-text-secondary: #64748b;
+    
+    /* Layout Constants */
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 72px;
+    --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Base Typography & Page Resets
+   ========================================================================== */
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--uipath-bg);
+    color: var(--uipath-text-main);
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Structural Flexbox Viewport System
+   ========================================================================== */
+.app-viewport {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.dashboard-viewport-row {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100vw;
+    height: calc(100vh - 56px); /* Viewport height minus header height */
+    overflow: hidden;
+}
+
+/* Explicit layout assignment for the sidebar wrapper */
+.orchestrator-sidebar {
+    width: 260px; /* Or your preferred static width */
+    min-width: 260px;
+    flex-shrink: 0;
+}
+
+/* The right side container must claim the remaining space */
+.main-content-panel {
+    flex-grow: 1 !important; /* Forces container to absorb all right-side space */
+    width: 100% !important;   /* Expands view to viewport boundaries */
+    min-width: 0;             /* Prevents layout tables from breaking screen walls */
+    height: 100%;             /* Ensures vertical filling match */
+    overflow-y: auto;         /* Restricts page scrolling to data panel only */
+}
+
+.dynamic-scroll-container {
+    width: 100% !important;   /* Stretches sub-modules uniformly across screen */
+    display: block;
+}
+
+.tab-pane-content {
+    width: 100%;
+}
+
+/* Modal Content Base styles */
+.modal-content {
+    background-color: #ffffff;
+    border: 1px solid var(--uipath-border);
+    border-radius: 8px;
+}
+
+.modal-header, .modal-footer {
+    background-color: #f8fafc;
+    border-color: var(--uipath-border);
+}
+
+/* Typography Helpers */
+.fs-7 { font-size: 0.8rem !important; }
+.fs-8 { font-size: 0.7rem !important; }

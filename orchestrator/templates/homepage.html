@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/homepage.css' %}">
+<nav class="navbar navbar-expand-lg pt-4 pb-0 bg-transparent">
+    <div class="container px-4">
+        <!-- Logo Element Top Left -->
+        <a class="navbar-brand brand-title" href="#">PTY Orchestrator<span class="brand-accent">.</span></a>
+        
+        <!-- Action Button Element Top Right -->
+        <div class="ms-auto">
+            <button type="button" class="btn btn-modern-login text-uppercase" data-bs-toggle="modal" data-bs-target="#loginModal">
+                Log-In
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Dashboard Area Element Frame -->
+<div class="container my-auto py-5">
+    <!-- Core Content Presentation Split Grid Layer -->
+    <div class="row align-items-center px-2">
+        <!-- Text Stack Column Panel Left -->
+        <div class="col-lg-6 mb-5 mb-lg-0">
+            <h1 class="hero-heading mb-4">
+                Build workflows <br>with <span class="hero-accent-ui">UI</span><span class="hero-accent">Automations</span>
+            </h1>
+            <p class="hero-description m-0 pe-lg-5">
+               Run automated control systems in dedicated, local container environments. 
+               Access clean, isolated workspace nodes optimized directly for local development projects.
+             </p>
+        </div>
+        
+        <!-- Numbers Tracking Block Row Frame Right -->
+        <div class="col-lg-6">
+            <div class="row g-4">
+                <!-- Data Counter Item: Automations -->
+                <div class="col-6">
+                    <div class="metric-card">
+                        <div class="metric-number">25<span class="brand-accent">+</span></div>
+                        <div class="metric-label">Automations</div>
+                    </div>
+                </div>
+                
+                <!-- Data Counter Item: Active Process -->
+                <div class="col-6">
+                    <div class="metric-card">
+                        <div class="metric-number" style="color: #007bff;">159</div>
+                        <div class="metric-label">Active process</div>
+                    </div>
+                </div>
+                
+                <!-- Data Counter Item: Inactive Process -->
+                <div class="col-6">
+                    <div class="metric-card">
+                        <div class="metric-number">298</div>
+                        <div class="metric-label">Inactive process</div>
+                    </div>
+                </div>
+
+                <!-- Data Counter Item: Users -->
+                <div class="col-6">
+                    <div class="metric-card">
+                        <div class="metric-number">12</div>
+                        <div class="metric-label">Users local</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Includes the clean system login modal structure file snippet framework -->
+{% include 'reusables/_login.html' %}
+{% include 'reusables/_footer.html' %}
+{% endblock %}

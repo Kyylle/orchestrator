@@ -1,0 +1,215 @@
+<!-- System Messages & Feedback -->
+ {% load static %}
+{% if messages %}
+<div class="mb-4">
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Header Controls -->
+<div class="d-md-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1 text-dark fw-bold">Centralized User Management</h1>
+        <p class="text-muted small mb-0">Configure system identities, department mapping, and explicit resource directory authorization rules.</p>
+    </div>
+    <div class="mt-3 mt-md-0">
+        <button onclick="openCreateModal()" class="btn btn-primary btn-sm px-3 py-2">
+            + Register New User
+        </button>
+    </div>
+</div>
+
+<!-- Search Form & Filters -->
+<div class="card shadow-sm border border-light-subtle mb-4">
+    <div class="card-body py-3">
+        <form method="GET" action="{% url 'admin_user_management' %}" class="row g-2">
+            <div class="col-md-9 col-lg-10">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search users by username..." 
+                       class="form-control form-control-sm">
+            </div>
+            <div class="col-md-3 col-lg-2 d-flex gap-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">
+                    Search
+                </button>
+                {% if search_query %}
+                <a href="{% url 'admin_user_management' %}" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center">
+                    Clear
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Users Table Card -->
+<div class="card shadow-sm border border-light-subtle overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 text-sm">
+            <thead class="table-light text-uppercase fs-7 text-secondary">
+                <tr>
+                    <th scope="col" class="px-4 py-3">ID</th>
+                    <th scope="col" class="py-3">Username</th>
+                    <th scope="col" class="py-3">Department</th>
+                    <th scope="col" class="py-3">Cross-Dept Access</th>
+                    <th scope="col" class="py-3">Admin Status</th>
+                    <th scope="col" class="py-3">Permitted Folders</th>
+                    <th scope="col" class="px-4 py-3 text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-dark">
+                {% for u in users_list %}
+                <tr>
+                    <td class="px-4 py-3 text-secondary">{{ u.id }}</td>
+                    <td class="py-3">
+                        <div class="fw-bold">{{ u.username }}</div>
+                        <div class="text-muted small fs-7">{{ u.local_sync_path|default:"No local path configured" }}</div>
+                    </td>
+                    <td class="py-3">
+                        {% if u.department_name %}
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5">
+                            {{ u.department_name }}
+                        </span>
+                        {% else %}
+                        <span class="text-muted small fs-7">None Specified</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3">
+                        {% if u.can_access_other_depts %}
+                        <span class="text-success small fw-medium">
+                            <span class="d-inline-block bg-success rounded-circle me-1" style="width: 6px; height: 6px;"></span> Allowed
+                        </span>
+                        {% else %}
+                        <span class="text-muted small">
+                            <span class="d-inline-block bg-secondary rounded-circle me-1" style="width: 6px; height: 6px;"></span> Restricted
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3">
+                        {% if u.is_admin %}
+                        <span class="badge bg-purple-subtle text-purple border border-purple-subtle rounded-pill px-2.5" style="color: #6f42c1; background-color: #f3e8ff; border-color: #e9d5ff;">
+                            Administrator
+                        </span>
+                        {% else %}
+                        <span class="badge bg-light text-dark border rounded-pill px-2.5">
+                            Standard User
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3">
+                        <span class="fw-bold text-secondary">{{ u.permitted_folders|length }}</span> folder(s) permitted
+                    </td>
+                    <td class="px-4 py-3 text-end">
+                        <button type="button" 
+                                class="btn btn-link btn-sm text-decoration-none text-primary p-0 fw-semibold"
+                                data-id="{{ u.id }}"
+                                data-username="{{ u.username|escapejs }}"
+                                data-department-id="{{ u.department_id|default:'' }}"
+                                data-can-access-other-depts="{% if u.can_access_other_depts %}true{% else %}false{% endif %}"
+                                data-is-admin="{% if u.is_admin %}true{% else %}false{% endif %}"
+                                data-permitted-folders="{% for folder_id in u.permitted_folders %}{{ folder_id }}{% if not forloop.last %},{% endif %}{% endfor %}"
+                                onclick="openEditModal(this)">
+                            Configure User
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-4 py-5 text-center text-muted small">
+                        No registered users matched the query.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap 5 Configuration Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0">
+            <form id="userForm" method="POST" action="" data-create-url="{% url 'admin_save_user' %}">
+                {% csrf_token %}
+                
+                <div class="modal-header border-bottom border-light">
+                    <h5 class="modal-title fw-bold text-dark fs-6" id="modalTitle">Register User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body py-4">
+                    <div class="d-flex flex-column gap-3">
+                        <!-- Username Input -->
+                        <div>
+                            <label for="form_username" class="form-label text-uppercase fs-7 fw-bold text-secondary tracking-wide mb-1">Username</label>
+                            <input type="text" id="form_username" name="username" required class="form-control form-control-sm">
+                        </div>
+
+                        <!-- Password Input -->
+                        <div>
+                            <label for="form_password" class="form-label text-uppercase fs-7 fw-bold text-secondary tracking-wide mb-1">Password</label>
+                            <input type="password" id="form_password" name="password" class="form-control form-control-sm">
+                            <div id="passwordHelp" class="form-text fs-7 text-muted mt-1">Leave password blank if you do not want to alter it.</div>
+                        </div>
+
+                        <!-- Department Selector -->
+                        <div>
+                            <label for="form_department" class="form-label text-uppercase fs-7 fw-bold text-secondary tracking-wide mb-1">Department Mapping</label>
+                            <select id="form_department" name="department_id" class="form-select form-select-sm">
+                                <option value="">-- No Department Assigned --</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Global Access Permissions Toggles -->
+                        <div class="bg-light p-3 rounded border border-light-subtle d-flex flex-column gap-3">
+                            <div class="form-check">
+                                <input id="form_is_admin" name="is_admin" type="checkbox" value="on" class="form-check-input">
+                                <label for="form_is_admin" class="form-check-label fw-semibold text-dark small">Grant Administrative Privileges</label>
+                                <div class="form-text fs-7 text-muted">Enables broad administration parameters.</div>
+                            </div>
+
+                            <div class="form-check">
+                                <input id="form_can_access" name="can_access_other_depts" type="checkbox" value="on" class="form-check-input">
+                                <label for="form_can_access" class="form-check-label fw-semibold text-dark small">Cross-Department Workspace Access</label>
+                                <div class="form-text fs-7 text-muted">Permit reading items from outside assigned department alignment.</div>
+                            </div>
+                        </div>
+
+                        <!-- Explicit Permissions Multiselect List -->
+                        <div>
+                            <label class="form-label text-uppercase fs-7 fw-bold text-secondary tracking-wide mb-1">Allowed Environment Directories</label>
+                            <p class="text-muted fs-7 mb-2">Select direct folders explicitly available to this user account.</p>
+                            <div class="border rounded p-3 bg-white" style="max-height: 160px; overflow-y: auto;">
+                                {% for folder in all_system_folders %}
+                                <div class="form-check mb-2">
+                                    <input id="folder_{{ folder.id }}" name="accessible_folders" type="checkbox" value="{{ folder.id }}" class="form-check-input folder-checkbox">
+                                    <label for="folder_{{ folder.id }}" class="form-check-label text-dark small select-none">
+                                        <span class="fw-semibold">{{ folder.name }}</span> 
+                                        <span class="text-muted fs-7">({{ folder.username }})</span>
+                                    </label>
+                                </div>
+                                {% empty %}
+                                <p class="text-muted fs-7 mb-0">No folders configured on system database.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top border-light bg-light py-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Save User Config</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+ <script src="{% static 'scripts/admin_user_management.js' %}"></script>

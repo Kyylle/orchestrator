@@ -1,0 +1,29 @@
+.footer-dark-bg {
+        background-color: #1e293b; /* Premium Navy Tint */
+        color: #f8fafc;
+        width: 100%;
+    }
+    .footer-text-muted {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    /* Small, Low-Profile Scroll to Top Button */
+    .btn-scroll-top {
+        width: 36px;
+        height: 36px;
+        background-color: #3b82f6;
+        border: none;
+        border-radius: 50%;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        transition: all 0.2s ease;
+    }
+    .btn-scroll-top:hover {
+        background-color: #2563eb;
+        transform: translateY(-1px);
+    }

@@ -1,0 +1,142 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/_automations_content.css' %}">
+
+<div class="d-flex flex-column h-100">
+    <!-- Sub-navigation tabs -->
+    <div class="sub-tab-bar d-flex border-bottom bg-white px-4">
+        <button class="sub-tab-link active" data-subtab="processes" onclick="switchSubTab('processes')">Processes</button>
+        <button class="sub-tab-link" data-subtab="jobs" onclick="switchSubTab('jobs')">Jobs</button>
+        <button class="sub-tab-link" data-subtab="triggers" onclick="switchSubTab('triggers')">Triggers</button>
+        <button class="sub-tab-link" data-subtab="packages" onclick="switchSubTab('packages')">Folder Packages</button>
+        <button class="sub-tab-link" data-subtab="logs" onclick="switchSubTab('logs')">Logs</button>
+    </div>
+
+    <!-- Dynamic Context Panel -->
+    <div class="p-4 flex-grow-1 bg-light-panel">
+        {% if selected_folder %}
+        
+        <!-- PROCESSES VIEW CONTENT -->
+        <div id="subtab-processes" class="subtab-pane">
+            <div class="orchestrator-panel p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                    <div>
+                        <h4 class="h6 mb-1 text-dark fw-bold">{{ selected_folder.name }}</h4>
+                        <p class="text-muted mb-0 fs-7">Physical Storage Path: 
+                            <code class="path-code rounded border fs-8">{{ selected_folder.physical_path }}</code>
+                        </p>
+                    </div>
+                    <div>
+                        {% if not is_admin %}
+                        <button class="btn btn-outline-secondary btn-sm px-3" data-bs-toggle="modal"
+                            data-bs-target="#editFolderModal">Edit Settings</button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if path_error %}
+                <div class="alert alert-warning border p-3 mb-0" role="alert">
+                    <h6 class="fw-bold mb-1">Directory Read Error</h6>
+                    <p class="mb-0 text-secondary fs-7">{{ path_error }}</p>
+                </div>
+                {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-sm table-minimal">
+                        <thead class="table-light text-uppercase fs-7 text-secondary">
+                            <tr>
+                                <th>Package Name ID</th>
+                                <th>Currently Active Version</th>
+                                <th class="text-end">Modify Runtime Version</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-dark">
+                            {% for name, meta in automations.items %}
+                            <tr>
+                                <td><strong class="text-dark">{{ name }}</strong></td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5">{{ meta.active }}</span>
+                                </td>
+                                <td class="text-end">
+                                    {% if is_admin %}
+                                    <span class="text-muted fs-8">View-only</span>
+                                    {% else %}
+                                    <form action="{% url 'select_version' %}" method="POST"
+                                        class="d-inline-flex gap-2 align-items-center justify-content-end mb-0">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="folder_id" value="{{ selected_folder.id }}">
+                                        <input type="hidden" name="package_name" value="{{ name }}">
+                                        <select name="version" class="form-select form-select-sm select-version-dropdown" required>
+                                            {% for version in meta.versions %}
+                                            <option value="{{ version }}" {% if version == meta.active %}selected{% endif %}>{{ version }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary px-3 py-1">Apply</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-5 fs-7">
+                                    <div class="fs-4 mb-2">📁</div>
+                                    No valid automation compilation files (.nupkg) found in this directory.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- JOBS VIEW CONTENT -->
+        <div id="subtab-jobs" class="subtab-pane d-none">
+            <div class="orchestrator-panel p-5 text-center text-muted">
+                <span class="fs-2 d-block mb-3">⚙️</span>
+                <p class="mb-0 fs-7">No active runtime processes are executing inside this folder.</p>
+            </div>
+        </div>
+
+        <!-- TRIGGERS VIEW CONTENT -->
+        <div id="subtab-triggers" class="subtab-pane d-none">
+            <div class="orchestrator-panel p-5 text-center text-muted">
+                <span class="fs-2 d-block mb-3">⏰</span>
+                <p class="mb-0 fs-7">No schedules or automated action triggers are configured.</p>
+            </div>
+        </div>
+
+        <!-- FOLDER PACKAGES VIEW CONTENT -->
+        <div id="subtab-packages" class="subtab-pane d-none">
+            <div class="orchestrator-panel p-4 bg-white border rounded shadow-sm">
+                <h6 class="text-dark fw-bold mb-3 border-bottom pb-2">Folder Package Registry</h6>
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% for name, meta in automations.items %}
+                    <li class="list-group-item bg-transparent text-muted fs-7 px-0 d-flex justify-content-between border-bottom border-light">
+                        <span>📦 {{ name }}</span>
+                        <span class="fs-8 text-secondary">Available versions: {{ meta.versions|length }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item bg-transparent text-muted fs-7 px-0">No raw package libraries found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- LOGS VIEW CONTENT -->
+        <div id="subtab-logs" class="subtab-pane d-none">
+            <div class="orchestrator-panel p-4">
+                <h6 class="text-dark fw-bold mb-3 border-bottom pb-2">Execution Console Stream</h6>
+                <pre class="execution-console-stream p-3 rounded text-start fs-8 mb-0">[SYSTEM] Listening for localized execution compilations...
+[SUCCESS] Pipeline connected cleanly to virtual workspace database.</pre>
+            </div>
+        </div>
+        
+        {% else %}
+        <div class="text-center my-5 py-5 orchestrator-panel">
+            <p class="text-muted fs-7 mb-0">Select or register a folder workspace from the sidebar list to inspect systems.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'scripts/_automations_content.js' %}"></script>

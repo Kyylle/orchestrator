@@ -1,0 +1,124 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/_sidebar.css' %}">
+<aside class="orchestrator-sidebar d-flex flex-column h-100" id="sidebarContainer">
+    <!-- Header -->
+    <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-shrink-0">
+        <div class="sidebar-header-text d-flex flex-column text-truncate">
+            <span class="fs-8 text-uppercase tracking-wider fw-bold text-muted sidebar-header-title">System Workspace</span>
+        </div>
+        <button class="btn btn-sm btn-link text-secondary p-1 border-0 shadow-none" id="sidebarToggle" title="Toggle Sidebar">
+            <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Search Directory -->
+    <div class="p-3 border-bottom search-wrapper flex-shrink-0">
+        <div class="position-relative search-input-container">
+            <input type="text" class="form-control form-control-minimal" placeholder="Search folders..." id="folderSearch">
+            <span class="position-absolute top-50 start-0 translate-middle-y ps-2 text-muted fs-7 search-icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </span>
+        </div>
+        <div class="search-icon-collapsed text-muted" id="searchTrigger" title="Search Folders">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Scrollable Navigation -->
+    <div class="flex-grow-1 overflow-y-auto py-2 custom-scrollbar">
+        <!-- Main Navigation Section -->
+        <div class="px-3 py-1 text-uppercase text-muted fs-7 fw-bold tracking-wider hide-on-collapsed sidebar-section-header">Navigation</div>
+        <div class="folder-list mt-1 mb-3 d-flex flex-column px-2">
+            <!-- Home -->
+            <a href="#" class="sidebar-folder-item nav-link-tab d-flex align-items-center active" data-tab="home" title="Home">
+                <span class="sidebar-icon me-3 text-secondary d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                </span>
+                <span class="sidebar-label">Home</span>
+            </a>
+
+            <!-- Automation -->
+            <a href="#" class="sidebar-folder-item nav-link-tab d-flex align-items-center" data-tab="automation" title="Automation">
+                <span class="sidebar-icon me-3 text-secondary d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                    </svg>
+                </span>
+                <span class="sidebar-label">Automation</span>
+            </a>
+        </div>
+
+        <!-- Administration Controls -->
+        {% if is_admin %}
+        <div class="px-3 py-1 text-uppercase text-muted fs-7 fw-bold tracking-wider hide-on-collapsed sidebar-section-header">Administration</div>
+        <div class="folder-list mt-1 mb-3 d-flex flex-column px-2">
+            <!-- User Management transformed into a regular UI switcher tab -->
+            <a href="#" class="sidebar-folder-item nav-link-tab d-flex align-items-center justify-content-between" data-tab="user_management" title="User Management">
+                <div class="d-flex align-items-center text-truncate">
+                    <span class="sidebar-icon me-3 text-secondary d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
+                    <span class="sidebar-label text-truncate">User Management</span>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Collapsible Tree Folders (Tied to Automation View) -->
+        <div id="sidebar-projects-section" class="d-none px-2">
+            <div class="px-2 py-1 text-uppercase text-muted fs-7 fw-bold tracking-wider hide-on-collapsed sidebar-section-header">Projects</div>
+            <div class="folder-list mt-1">
+                {% regroup folders by department_name as folders_by_department %}
+                {% for group in folders_by_department %}
+                <div class="px-2 py-1 text-uppercase text-muted fs-7 fw-bold tracking-wider mt-2 hide-on-collapsed sidebar-section-header">
+                    🏢 {{ group.grouper }}
+                </div>
+                <div class="folder-list mt-1 d-flex flex-column">
+                    {% for folder in group.list %}
+                    <a href="{% url 'dashboard' %}?folder_id={{ folder.id }}" class="sidebar-folder-item d-flex align-items-center justify-content-between" data-folder-name="{{ folder.name|lower }}" title="{{ folder.name }}">
+                        <div class="d-flex align-items-center text-truncate">
+                            <span class="sidebar-icon me-3 text-secondary d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                </svg>
+                            </span>
+                            <span class="sidebar-label text-truncate">{{ folder.name }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% empty %}
+                <div class="text-muted px-2 py-2 fs-7 hide-on-collapsed">No folders registered.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile & Sign-out Panel -->
+    <div class="p-3 border-top bg-light mt-auto">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="text-truncate sidebar-profile-details d-flex flex-column hide-on-collapsed">
+                <span class="text-muted profile-label">Profile</span>
+                <strong class="text-dark fs-7 text-truncate profile-name">
+                    {{ request.session.username|default:"Admin Profile" }}
+                </strong>
+            </div>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center p-2 rounded" title="Sign Out">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</aside>
+<script src="{% static 'scripts/_sidebar.js' %}"></script>

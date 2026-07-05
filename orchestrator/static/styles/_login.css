@@ -1,0 +1,102 @@
+.modal-minimal {
+    max-width: 420px;
+}
+
+.modal-content-flat {
+    border-radius: 16px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+}
+
+.modal-heading-title {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #0f172a;
+}
+
+.modal-heading-sub {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.form-label-minimal {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-minimal {
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    padding: 10px 14px !important;
+    transition: all 0.2s ease;
+}
+
+.input-minimal:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15) !important;
+}
+
+.btn-minimal-submit {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 0;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-minimal-submit:hover {
+    background-color: #0069d9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-minimal-cancel {
+    font-weight: 500;
+    color: #64748b;
+}
+
+.btn-minimal-cancel:hover {
+    color: #0f172a;
+}
+
+
+
+
+/* Force the modal to stay visible when login_error is true */
+.modal.modal-force-open {
+    display: block !important;
+    opacity: 1 !important;
+     transition: none !important;
+}
+
+.modal-custom-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5); /* Modern Slate Backdrop */
+    z-index: 1040;
+}
+
+.modal-force-open .modal-dialog {
+    z-index: 1050;
+    pointer-events: auto;
+    transform: none !important;
+}
+
+/* Modal UI Styling */
+.modal-content-flat {
+    border-radius: 16px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+}
+
+
+

@@ -1,0 +1,91 @@
+/* ==========================================================================
+   User Management Admin Panel Styles
+   ========================================================================== */
+
+/* User Registry Data Table */
+.table-light-custom {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(27, 117, 255, 0.01);
+}
+
+.table-light-custom th {
+    color: var(--uipath-text-secondary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-bottom: 1.5px solid var(--uipath-border);
+    padding: 0.85rem 1rem;
+}
+
+.table-light-custom td {
+    border-bottom: 1px solid var(--uipath-border);
+    font-size: 0.85rem;
+    padding: 0.85rem 1rem;
+}
+
+/* User Account Status Badges */
+.badge-active {
+    background-color: #ecfdf5;
+    color: #059669;
+    font-weight: 600;
+    padding: 0.3rem 0.65rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    border: 1px solid #a7f3d0;
+    display: inline-block;
+}
+
+/* User Management Form Inputs */
+.form-control-light-sm {
+    background-color: #ffffff;
+    border: 1px solid var(--uipath-border);
+    color: var(--uipath-text-main);
+    font-size: 0.825rem;
+    border-radius: 4px;
+}
+
+.form-control-light-sm:focus {
+    border-color: var(--uipath-blue);
+    box-shadow: 0 0 0 2px rgba(27, 117, 255, 0.1);
+}
+
+.form-select-light-sm {
+    background-color: #ffffff;
+    border: 1px solid var(--uipath-border);
+    color: var(--uipath-text-main);
+    font-size: 0.8rem;
+    border-radius: 4px;
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+}
+
+/* Administrative Action Buttons */
+.btn-primary-uipath {
+    background-color: var(--uipath-blue);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.btn-primary-uipath:hover {
+    background-color: var(--uipath-blue-hover);
+    color: #ffffff;
+}
+
+.btn-outline-primary-uipath {
+    background-color: transparent;
+    color: var(--uipath-blue);
+    border: 1px solid var(--uipath-blue);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.15s ease;
+}
+
+.btn-outline-primary-uipath:hover {
+    background-color: var(--uipath-blue);
+    color: #ffffff;
+}

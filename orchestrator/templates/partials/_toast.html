@@ -1,0 +1,45 @@
+<div class="toast-wrapper" id="toastContainer">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="toast-item">
+        <input type="checkbox" id="toast-{{ forloop.counter }}" class="toast-state" hidden>
+        <div class="orbital-toast toast-error-variant">
+            <div class="toast-content-layout">
+                <div class="icon-holder">
+                    <!-- Note: Fixed the stray broken closing tag here too -->
+                    <div class="toast-svg-icon"></div>
+                </div>
+                <div class="text-holder">
+                    <p class="toast-title">Authentication Failed</p>
+                    <p class="toast-desc">{{ message }}</p>
+                </div>
+                <label for="toast-{{ forloop.counter }}" class="close-btn">&times;</label>
+            </div>
+            <div class="toast-progress"></div>
+        </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<!-- REUSABLE JAVASCRIPT TEMPLATE -->
+<template id="jsToastTemplate">
+    <div class="toast-item">
+        <input type="checkbox" class="toast-state" hidden>
+        <div class="orbital-toast toast-error-variant">
+            <div class="toast-content-layout">
+                <div class="icon-holder">
+                    <div class="toast-svg-icon">
+                         <img src="/static/icons/info.svg" alt="Error Icon" class="toast-svg-icon">
+                    </div>
+                </div>
+                <div class="text-holder">
+                    <p class="toast-title">Authentication Failed</p>
+                    <p class="toast-desc"></p> <!-- Kept empty for JS insertion -->
+                </div>
+                <label class="close-btn">&times;</label>
+            </div>
+            <div class="toast-progress"></div>
+        </div>
+    </div>
+</template>

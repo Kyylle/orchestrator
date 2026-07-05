@@ -1,0 +1,51 @@
+/* ==========================================================================
+   Top Header & Navigation Components
+   ========================================================================== */
+.orchestrator-top-navbar {
+    height: 48px;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--uipath-border);
+}
+
+.header-menu-btn {
+    line-height: 1;
+}
+
+.header-icon-emoji {
+    font-size: 1.1rem;
+}
+
+.user-avatar-light {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+    background-color: var(--uipath-blue) !important;
+}
+
+.orchestrator-main-nav {
+    height: 44px;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--uipath-border);
+}
+
+.nav-item-link {
+    color: var(--uipath-text-secondary);
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 44px;
+    line-height: 44px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    display: inline-block;
+    transition: all 0.15s ease;
+}
+
+.nav-item-link:hover {
+    color: var(--uipath-text-main);
+}
+
+.nav-item-link.active {
+    color: var(--uipath-blue);
+    border-bottom-color: var(--uipath-blue);
+}
